@@ -1,0 +1,5 @@
+ID,bookName,borrowedDate,returnDate,person,authorName,year
+1,To Kill a Mockingbird,2024-04-01,2024-04-02,Özgür Uygun,Harper Lee,2024
+2,To Kill a Mockingbird,2024-04-05,2024-04-08,Murat Deniz,Harper Lee,2024
+3,To Kill a Mockingbird,2024-04-06,2024-04-07,Deniz Aslan,Harper Lee,2024
+4,Pride and Prejudice,2024-04-12,2024-04-14,Ece Derya,Jane Austen,2024

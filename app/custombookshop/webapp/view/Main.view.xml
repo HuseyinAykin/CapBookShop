@@ -1,0 +1,72 @@
+<mvc:View controllerName="custombookshop.controller.Main"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+  xmlns:form="sap.ui.layout.form"
+  xmlns:core="sap.ui.core"
+  xmlns:smartTable="sap.ui.comp.smarttable"
+  xmlns="sap.m"
+  xmlns:u="sap.ui.unified"
+  xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+  xmlns:sl="sap.ui.comp.navpopover"
+  xmlns:ndc="sap.ndc"
+  xmlns:smartchart="sap.ui.comp.smartchart" displayBlock="true">
+  <Page id="page" title="{i18n>title}" titleAlignment="Center">
+    <IconTabBar id="idIconTabBar" class="sapUiResponsiveContentPadding">
+      <items>
+        <IconTabFilter text="{i18n>books}" key="books">
+          <smartFilterBar:SmartFilterBar id="smartFilterBar" entitySet="Books" persistencyKey="SmartFilter_Explored" enableBasicSearch="false" showClearOnFB="true">
+            <smartFilterBar:layoutData>
+              <FlexItemData shrinkFactor="0"/>
+            </smartFilterBar:layoutData>
+          </smartFilterBar:SmartFilterBar>
+          <smartTable:SmartTable id="idTblBookData" entitySet="Books" tableType="ResponsiveTable" header="Books" smartFilterId="smartFilterBar" persistencyKey="SmartTableAnalytical_Explored" enableAutoBinding="true" beforeRebindTable="onBeforeRebindBooksTable" class="sapUiResponsiveContentPadding" enableAutoColumnWidth="true">
+            <smartTable:customToolbar>
+              <OverflowToolbar id="_IDGenOverflowToolbar1" design="Transparent">
+                <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
+                <ndc:BarcodeScannerButton id="BarcodeScannerButton" scanSuccess="onScanSuccess" scanFail="onScanError" inputLiveUpdate="onScanLiveupdate" dialogTitle="{i18n>findBook}"/>
+                <Button id="_IDGenButton1" text="{i18n>createBook}" press="onCreateBook" type="Emphasized"/>
+                <Button id="_IDGenButton2" text="{i18n>borrowBook}" press="onBorrowBook" type="Default"/>
+              </OverflowToolbar>
+            </smartTable:customToolbar>
+            <Table id="idTable" selectionChange="onSelectChange" mode="SingleSelectMaster" inset="false" sticky="ColumnHeaders,HeaderToolbar" growing="true" growingScrollToLoad="false" growingThreshold="20" growingDirection="Downwards" updateFinished="onUpdateFinished">
+              <columns>
+
+                <Column id="id" width="13%" hAlign="End">
+                  <customData>
+                    <core:CustomData key="p13nData" value='\{"columnKey": "Edit", "columnIndex": 6}'/>
+                  </customData>
+                  <Text text="{i18n>edit}" visible="false"/>
+                </Column>
+              </columns>
+              <items>
+                <ColumnListItem vAlign="Middle">
+                  <cells>
+
+                    <HBox justifyContent="End" alignItems="Start" alignContent="SpaceBetween">
+                      <Button icon="sap-icon://edit" press="onEditBook" tooltip="{i18n>edit}" class="sapUiTinyMarginEnd"/>
+                      <Button icon="sap-icon://delete" press="onDeleteBook" tooltip="{i18n>delete}" enabled="true" class="sapUiTinyMarginEnd"/>
+                      <Button icon="sap-icon://chain-link" press="onPressIsbn" enabled="true" class="sapUiTinyMarginEnd"/>
+                    </HBox>
+                  </cells>
+                </ColumnListItem>
+              </items>
+            </Table>
+          </smartTable:SmartTable>
+        </IconTabFilter>
+        <IconTabFilter text="{i18n>reportings}" key="reporting">
+          <smartFilterBar:SmartFilterBar id="smartFilterBarReportings" entitySet="Reportings" persistencyKey="SmartFilterReportings_Explored" enableBasicSearch="false" showClearOnFB="true">
+            <smartFilterBar:layoutData>
+              <FlexItemData shrinkFactor="0"/>
+            </smartFilterBar:layoutData>
+          </smartFilterBar:SmartFilterBar>
+          <smartTable:SmartTable entitySet="Reportings" tableType="ResponsiveTable" smartFilterId="smartFilterBarReportings" enableAutoBinding="true" header="{i18n>reportings}"></smartTable:SmartTable>
+          <smartchart:SmartChart id="smartChartBooks" enableAutoBinding="true" entitySet="BooksCharts" header="{i18n>booksCharts}" width="50%" height="300px"/>
+          <smartchart:SmartChart id="smartChartAuthors" enableAutoBinding="true" entitySet="AuthorsCharts" header="{i18n>authorsCharts}" width="50%" height="300px"/>
+
+
+        </IconTabFilter>
+      </items>
+    </IconTabBar>
+
+  </Page>
+</mvc:View>

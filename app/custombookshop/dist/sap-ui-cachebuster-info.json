@@ -1,0 +1,20 @@
+{
+  "Component-preload.js": 1712242816872,
+  "i18n/i18n.properties": 1712177880673,
+  "controller/Main.controller.js": 1712173894521,
+  "model/models.js": 1711398181987,
+  "manifest.json": 1712242816524,
+  "controller/App.controller.js": 1711567635452,
+  "Component.js": 1711398181983,
+  "i18n/i18n_en.properties": 1712219175374,
+  "Component-dbg.js": 1711398181983,
+  "controller/Main-dbg.controller.js": 1712173894521,
+  "controller/App-dbg.controller.js": 1711567635452,
+  "model/models-dbg.js": 1711398181987,
+  "view/fragments/CreateBook.fragment.xml": 1712067524585,
+  "view/fragments/BorrowBook.fragment.xml": 1712177869645,
+  "view/Main.view.xml": 1712128090730,
+  "view/App.view.xml": 1711548102469,
+  "css/style.css": 1711398181991,
+  "index.html": 1711398181983
+}

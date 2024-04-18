@@ -1,0 +1,22 @@
+<mvc:View controllerName="custombookshop.controller.App"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <App id="app"></App>
+    <!-- <Table> -->
+     <!-- <Page id="page" title="{i18n>title}">
+        <content>
+            <IconTabBar id="idIconTabBar">
+            <items>
+            <IconTabFilter id="TabFilter1" text="List" key="List">
+            <Button id="idButton" text="123"/>
+            </IconTabFilter>
+            <IconTabFilter id="TabFilter2" text="Reporting" key="Reporting">
+            <Button id="idButton2" text="123"/>
+            </IconTabFilter>
+
+            </items>
+            </IconTabBar>
+        </content>
+    </Page>  -->
+
+</mvc:View>
