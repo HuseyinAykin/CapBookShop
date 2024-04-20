@@ -15,11 +15,14 @@ sap.ui.define([
         return Controller.extend("custombookshop.controller.Main", {
             onInit: function () {
                 var oModel = new JSONModel({
-                    authorNameVisibility: false
+                    authorNameVisibility: false,
+                    categoryNameVisibility: false
                 });
                 this.getOwnerComponent().setModel(oModel, "viewModel");
                 this.viewModel = this.getOwnerComponent().getModel("viewModel");
                 this.i18n = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+
+                // this.byId("smartChartBooks").rebindChart();
             },
 
             onAfterRendering: function () {
@@ -28,6 +31,24 @@ sap.ui.define([
                         this.viewModel.setProperty("/authors", oData.results);
                     }, this)
                 });
+                this.getView().getModel().read("/Categories", {
+                    success: $.proxy(function (oData) {
+                        this.viewModel.setProperty("/categories", oData.results);
+                    }, this)
+                });
+            },
+
+            onScanSuccess: function (oEvent) {
+                var scannedValue = oEvent.getParameter("text");
+                var filterBar = this.byId("smartFilterBar");
+
+                filterBar.setFilterData({
+                    isbn: scannedValue
+                });
+
+                filterBar.getControlByKey("isbn").setValue(scannedValue);
+
+                filterBar.search();
             },
 
             onCreateBook: function (oEvent) {
@@ -36,6 +57,13 @@ sap.ui.define([
                     this._oDialog = undefined;
                 }
                 this.openDialog(oEvent);
+            },
+
+            onPressIsbn: function (oEvent) {
+                let oSelectedItem = oEvent.getSource().getBindingContext().getObject();
+                let bookURL = "https://isbndb.com/book/" + oSelectedItem.isbn;
+                window.open(bookURL, "_blank");
+
             },
 
             onEditBook: function (oEvent) {
@@ -62,14 +90,7 @@ sap.ui.define([
                                     success: $.proxy(function (oData, sResponse) {
                                         MessageToast.show(this.i18n.getText("succBookDelete"));
                                     }, this)
-                                    // success: function (oData, sResponse) {
-                                    //     if (oData === undefined) {
-                                    //         if (sResponse.statusCode === "204" && sResponse.body === "") {
-                                    //             MessageToast.show(this.i18n.getText("succBookDelete"));
-                                    //         }
-                                    //     }
-                                    // }.bind(this),
-                                    // error: this.errorCallback.bind(this)
+                                   
                                 });
                                 this._oBookDeleteDialog.close();
                             }.bind(this)
@@ -88,10 +109,10 @@ sap.ui.define([
             },
             onCreateAuthor: function () {
                 this.viewModel.setProperty("/authorNameVisibility", true);
-                //  var bVisible = false;
+            },
 
-                //  sap.ui.core.Fragment.byId("CreateBookFragment","authorExtraCreateColumn").setVisible(true);
-
+            onCreateCategory: function () {
+                this.viewModel.setProperty("/categoryNameVisibility", true);
             },
 
 
@@ -133,9 +154,14 @@ sap.ui.define([
                 this.CreateBookDialog.bindElement({
                     path: sPath
                 });
+
+                this.viewModel.setProperty("/authorNameVisibility", false);
+                this.viewModel.setProperty("/categoryNameVisibility", false);
             },
 
             bindNewBook: function () {
+                this.viewModel.setProperty("/authorNameVisibility", false);
+                this.viewModel.setProperty("/categoryNameVisibility", false);
                 this.tempEvent = this.getView().getModel().createEntry("Books", {
                     properties: {}
                 });
@@ -146,13 +172,13 @@ sap.ui.define([
                 });
             },
 
-            onAuthorIDLiveChange: function (oEvent) {
-                let authorId = parseInt(oEvent.getParameter("value"));
-                let authorExists = this.viewModel.getProperty("/authors").some(function (item) {
-                    return item.ID = authorId;
-                });
+            // onAuthorIDLiveChange: function (oEvent) {
+            //     let authorId = parseInt(oEvent.getParameter("value"));
+            //     let authorExists = this.viewModel.getProperty("/authors").some(function (item) {
+            //         return item.ID = authorId;
+            //     });
 
-            },
+            // },
 
             setDialogTitle: function (sExistingQPath) {
                 if (this.CreateBookDialog) {
@@ -185,7 +211,17 @@ sap.ui.define([
                     oModel.setProperty(this.tempEvent.getPath() + "/author_ID", this.authorEvent.getProperty("ID"));
                 }
 
+                let categoryName = this.viewModel.getProperty("/categoryName");
+                if (categoryName) {
+                    this.categoryEvent = this.getView().getModel().createEntry("/Categories", {
+                        properties: {
+                            name: categoryName,
+                            ID: this.viewModel.getProperty("/categories").length + 1
+                        }
+                    });
 
+                    oModel.setProperty(this.tempEvent.getPath() + "/category_ID", this.categoryEvent.getProperty("ID"));
+                }
 
 
                 if (this.bIsCreateNew) {
@@ -208,47 +244,10 @@ sap.ui.define([
                 // }
             },
 
-            // successCallback: function () {
-            //     MessageToast.show(this.i18n.getText("successfullyCreated"));
-            // },
-
             setI18nResponseMsg: function (sSuccess, sError) {
                 this.successI18nMsg = sSuccess;
                 // this.errorI18nMsg = sError;
             },
-
-            // deleteBook: function () {
-            //     this.getView().getModel().remove("/Books('8')", {
-            //         success: function () {
-            //             MessageToast.show(this.i18n.getText("successfullyCreated"));
-            //         },
-            //         error: function (oError) {
-
-            //         }
-            //     });
-            // }
-            // successCallback: function (oData, sResponse) {
-            //     var bIsError = false;
-            //     if (oData !== undefined && Object.keys(oData).length !== 0) {
-            //         oData.__batchResponses.forEach(function (oItem) {
-            //             if (oItem.response !== undefined) {
-            //                 if (oItem.response.statusCode === "400") {
-            //                     bIsError = true;
-            //                     var iStart = oItem.response.body.search("{\"lang\":\"en\",\"value\":\"");
-            //                     var sError = oData.__batchResponses[0].response.body.substring(iStart + 22, oData.__batchResponses[0].response.body
-            //                         .indexOf(
-            //                             "."));
-            //                     sap.m.MessageBox.error(sError);
-            //                 }
-            //             }
-            //         });
-            //     }
-            //     if (!bIsError) {
-            //         var sText = this.i18n.getText(this.successI18nMsg);
-            //         sap.m.MessageToast.show(sText);
-            //     }
-            //     this.setI18nResponseMsg("", ""); // reset global Msg for next Response Text
-            // },
 
             onBorrowBook: function () {
 
@@ -274,7 +273,10 @@ sap.ui.define([
             bindNewBorrowBook: function () {
                 this.getView().getModel().resetChanges(); //reset any OData changes
                 this.borrowBookEvent = this.getView().getModel().createEntry("Reportings", {
-                    properties: {}
+                    properties: {
+                        borrowedDate: new Date(),
+                        bookName: ""
+                    }
                 });
 
                 this.BorrowBookDialog.bindElement({
@@ -282,13 +284,44 @@ sap.ui.define([
                 });
             },
 
+            onScanBorrowBookSuccess: function (oEvent) {
+                if (oEvent.getParameter("cancelled")) {
+                    MessageToast.show("Scan cancelled", {
+                        duration: 1000
+                    });
+                } else {
+                    if (oEvent.getParameter("text")) {
+                        this.getView().getModel().setProperty(this.borrowBookEvent.getPath() + "/book_ID", oEvent.getParameter("text"));
+                    } else {
+                        MessageToast.show("");
+                    }
+                }
+            },
+
+            onScanBorrowBookError: function (oEvent) {
+                MessageToast.show("Scan failed: " + oEvent, {
+                    duration: 1000
+                });
+            },
+
             saveBorrowBook: function () {
                 let oModel = this.getView().getModel();
+
+                let id = this.borrowBookEvent.getProperty("book_ID");
+                let book = oModel.getProperty("/Books(" + id + ")");
+                this.getView().getModel().setProperty(this.borrowBookEvent.getPath() + "/bookName", book.title);
+                if (book.availability === "N") {
+                    MessageBox.warning(this.i18n.getText("borrowedBookWarning"));
+                    return 1;
+                }
 
                 oModel.submitChanges({
                     success: $.proxy(function () {
                         MessageToast.show(this.i18n.getText("successfullyCreated"));
+                        this.getView().byId("idTblBookData").rebindTable();
                         this.onCloseBorrowBookDialog();
+                        this.byId("smartChartBooks").rebindChart();
+                        this.byId("smartChartAuthors").rebindChart();
                     }, this),
 
                     error: function (oError) {
@@ -303,6 +336,5 @@ sap.ui.define([
                 this.borrowBookEvent = null;
                 this.BorrowBookDialog.unbindElement();
             }
-
         });
     });

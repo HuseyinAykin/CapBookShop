@@ -1,6 +1,6 @@
-ID,name,countryOfBirth
+ID,name,countryOfBirth_code
 1,Harper Lee,USA
-2,George Orwell,India
-3,Jane Austen,Great Britain
+2,George Orwell,USA
+3,Jane Austen,UK
 4,Dan Brown,USA
 5,Walter Isaacson,USA

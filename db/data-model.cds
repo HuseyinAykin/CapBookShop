@@ -25,7 +25,7 @@ entity Books : managed {
 entity Authors : managed {
     key ID             : Integer @title: 'Author ID';
         name           : String  @title: 'Author Name';
-        countryOfBirth : String @title: 'Country of Birth';
+        countryOfBirth : Country;
         books          : Association to many Books
                              on books.author = $self;
 }
