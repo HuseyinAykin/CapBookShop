@@ -209,6 +209,7 @@ sap.ui.define([
                     });
 
                     oModel.setProperty(this.tempEvent.getPath() + "/author_ID", this.authorEvent.getProperty("ID"));
+                    
                 }
 
                 let categoryName = this.viewModel.getProperty("/categoryName");

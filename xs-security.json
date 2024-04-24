@@ -3,10 +3,7 @@
   "tenant-mode": "dedicated",
   "description": "Security profile of called application",
   "scopes": [
-    {
-      "name": "uaa.user",
-      "description": "UAA"
-    },
+    
     {
       "name": "$XSAPPNAME.admin",
       "description": "admin"
@@ -14,16 +11,16 @@
   ],
   "role-templates": [
     {
-      "name": "Token_Exchange",
-      "description": "UAA",
+      "name": "admin",
+      "description": "generated",
       "scope-references": [
-        "uaa.user"
+        "$XSAPPNAME.admin"
       ]
     }
   ],
   "oauth2-configuration": {
     "redirect-uris": [
-      "https://bbda6c5atrial-dev-capbookshop.cfapps.us10-001.hana.ondemand.com/login/callback"
+      "https://8436aaf7trial-dev-capbookshop.cfapps.us10-001.hana.ondemand.com/login/callback"
     ]
   },
   "attributes": []

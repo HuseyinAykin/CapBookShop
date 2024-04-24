@@ -8,8 +8,9 @@ annotate service.Authors with {
 
 annotate service.Books with {
 
-    ID     @Common.Label: '{i18n>bookID}';
-    author @Common.Label: '{i18n>author}'
+    ID       @Common.Label: '{i18n>bookID}';
+    author   @Common.Label: '{i18n>author}';
+    category @Common.Label: '{i18n>category}';
 
 };
 
@@ -32,6 +33,7 @@ annotate service.Books @(UI: {
         ID,
         title,
         author_ID,
+        category_ID,
         isbn
     ],
 
@@ -58,6 +60,22 @@ annotate service.Books @(UI: {
             Criticality: criticality
         }
     ]
+});
+
+annotate service.Authors @(UI: {
+    SelectionFields: [name],
+
+    LineItem       : [
+        {
+            $Type: 'UI.DataField',
+            Value: name
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: countryOfBirth.name
+        }
+
+    ],
 });
 
 annotate service.Reportings @(UI: {
@@ -93,16 +111,13 @@ annotate service.BooksCharts @(UI: {
     SelectionFields: [borrowedDate],
     Chart          : {
         ChartType          : #Column,
-        Dimensions         : [
-            bookName
+        Dimensions         : [bookName
 
         ],
-        DimensionAttributes: [
-            {
-                Dimension: 'bookName',
-                Role     : #Category
-            }
-        ],
+        DimensionAttributes: [{
+            Dimension: 'bookName',
+            Role     : #Category
+        }],
         Measures           : ['count'],
         MeasureAttributes  : [{
             Measure: 'count',
@@ -110,22 +125,18 @@ annotate service.BooksCharts @(UI: {
         }]
     }
 
-    
+
 });
 
 annotate service.AuthorsCharts @(UI: {
     SelectionFields: [borrowedDate],
     Chart          : {
         ChartType          : #Bar,
-        Dimensions         : [
-            authorName
-        ],
-        DimensionAttributes: [
-            {
-                Dimension: 'authorName',
-                Role     : #Category
-            }
-        ],
+        Dimensions         : [authorName],
+        DimensionAttributes: [{
+            Dimension: 'authorName',
+            Role     : #Category
+        }],
         Measures           : ['count'],
         MeasureAttributes  : [{
             Measure: 'count',
@@ -133,7 +144,7 @@ annotate service.AuthorsCharts @(UI: {
         }]
     }
 
-    
+
 });
 
 
@@ -192,6 +203,24 @@ annotate service.Books with {
             {
                 $Type            : 'Common.ValueListParameterInOut',
                 LocalDataProperty: 'author_ID',
+                ValueListProperty: 'ID'
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'name'
+            }
+        ]
+    };
+    category
+
+          @Common.ValueList               : {
+        @Type          : 'Common.ValueListType',
+        CollectionPath : 'Categories',
+        SearchSupported: true,
+        Parameters     : [
+            {
+                $Type            : 'Common.ValueListParameterInOut',
+                LocalDataProperty: 'category_ID',
                 ValueListProperty: 'ID'
             },
             {
