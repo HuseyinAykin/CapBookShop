@@ -30,7 +30,6 @@
             </smartTable:customToolbar>
             <Table id="idTable" selectionChange="onSelectChange" mode="SingleSelectMaster" inset="false" sticky="ColumnHeaders,HeaderToolbar" growing="true" growingScrollToLoad="false" growingThreshold="20" growingDirection="Downwards" updateFinished="onUpdateFinished">
               <columns>
-
                 <Column id="id" width="13%" hAlign="End">
                   <customData>
                     <core:CustomData key="p13nData" value='\{"columnKey": "Edit", "columnIndex": 6}'/>
@@ -41,7 +40,6 @@
               <items>
                 <ColumnListItem vAlign="Middle">
                   <cells>
-
                     <HBox justifyContent="End" alignItems="Start" alignContent="SpaceBetween">
                       <Button icon="sap-icon://edit" press="onEditBook" tooltip="{i18n>edit}" class="sapUiTinyMarginEnd"/>
                       <Button icon="sap-icon://delete" press="onDeleteBook" tooltip="{i18n>delete}" enabled="true" class="sapUiTinyMarginEnd"/>
@@ -62,11 +60,16 @@
           <smartTable:SmartTable entitySet="Reportings" tableType="ResponsiveTable" smartFilterId="smartFilterBarReportings" enableAutoBinding="true" header="{i18n>reportings}"></smartTable:SmartTable>
           <smartchart:SmartChart id="smartChartBooks" enableAutoBinding="true" entitySet="BooksCharts" header="{i18n>booksCharts}" width="50%" height="300px"/>
           <smartchart:SmartChart id="smartChartAuthors" enableAutoBinding="true" entitySet="AuthorsCharts" header="{i18n>authorsCharts}" width="50%" height="300px"/>
-
-
+        </IconTabFilter>
+        <IconTabFilter text="{i18n>author}" key="author">
+          <smartFilterBar:SmartFilterBar id="smartFilterBarAuthors" entitySet="Authors" persistencyKey="SmartFilterAuthors_Explored" enableBasicSearch="false" showClearOnFB="true">
+            <smartFilterBar:layoutData>
+              <FlexItemData shrinkFactor="0"/>
+            </smartFilterBar:layoutData>
+             <smartTable:SmartTable entitySet="Authors" tableType="ResponsiveTable" smartFilterId="smartFilterBarAuthors" enableAutoBinding="true" header="{i18n>author}"></smartTable:SmartTable>
+          </smartFilterBar:SmartFilterBar>
         </IconTabFilter>
       </items>
     </IconTabBar>
-
   </Page>
 </mvc:View>
