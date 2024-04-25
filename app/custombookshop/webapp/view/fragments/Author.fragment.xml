@@ -5,30 +5,24 @@
 	xmlns:smartForm="sap.ui.comp.smartform"
 	xmlns:smartField="sap.ui.comp.smartfield"
 	xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
-	<Dialog id="CreateBookFragment" class="sapUiSizeCompact" contentWidth="400px">
+	<Dialog id="CreateAuthorFragment" class="sapUiSizeCompact" contentWidth="400px">
 		<VBox id="emID" class="sapUiSmallMargin">
 			<f:SimpleForm id="SimpleFormChange354" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
 				<f:content>
-					<Label text="{i18n>bookTitle}"/>
-					<Input value="{title}"/>
 					<Label text="{i18n>authorName}"/>
-						<ComboBox items="{/Authors}" selectedKey="{author_ID}" editable="{= !${viewModel>/authorNameVisibility}}">
-							<core:Item key="{ID}" text="{name}"/>
+					<Input value="{name}"/>		
+                    	<Label text="{i18n>country}"/>
+                        <ComboBox items="{/Countries}" selectedKey="{countryOfBirth_code}">
+							<core:Item key="{code}" text="{name}"/>
 						</ComboBox>
-				
-					<Label text="{i18n>category}"/>
-				
-						<ComboBox items="{/Categories}" selectedKey="{category_ID}" editable="{= !${viewModel>/categoryNameVisibility}}">
-							<core:Item key="{ID}" text="{name}"/>
-						</ComboBox>
-				
+					<!-- <Input value="{countryOfBirth/name}"/>	 -->
 				</f:content>
 			</f:SimpleForm>
 			<l:VerticalLayout id="idVerticalLayout" width="100%"></l:VerticalLayout>
 		</VBox>
 		<buttons>
-			<Button id="_IDGenButton1" text="{i18n>save}" press="saveBook" type="Emphasized"/>
-			<Button id="_IDGenButton2" text="{i18n>cancel}" press="onCloseCreateBookDialog"/>
+			<Button id="_IDGenButton1" text="{i18n>save}" press="saveAuthor" type="Emphasized"/>
+			<Button id="_IDGenButton2" text="{i18n>cancel}" press="onCloseCreateAuthorDialog"/>
 		</buttons>
 	</Dialog>
 </core:FragmentDefinition>

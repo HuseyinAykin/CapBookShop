@@ -15,8 +15,8 @@ sap.ui.define([
         return Controller.extend("custombookshop.controller.Main", {
             onInit: function () {
                 var oModel = new JSONModel({
-                    authorNameVisibility: false,
-                    categoryNameVisibility: false
+                    // authorNameVisibility: false,
+                    // categoryNameVisibility: false
                 });
                 this.getOwnerComponent().setModel(oModel, "viewModel");
                 this.viewModel = this.getOwnerComponent().getModel("viewModel");
@@ -107,18 +107,18 @@ sap.ui.define([
                     this._oBookDeleteDialog.open();
                 }
             },
-            onCreateAuthor: function () {
-                this.viewModel.setProperty("/authorNameVisibility", true);
-            },
+            // onCreateAuthor: function () {
+            //     this.viewModel.setProperty("/authorNameVisibility", true);
+            // },
 
             onCreateCategory: function () {
-                this.viewModel.setProperty("/categoryNameVisibility", true);
+                // this.viewModel.setProperty("/categoryNameVisibility", true);
             },
 
 
             openDialog: function (oEvent, sExistinQPath) {
                 this.getView().getModel().resetChanges(); //reset any OData changes
-                this.viewModel.setProperty("/authorName", "");
+                // this.viewModel.setProperty("/authorName", "");
                 if (!this.CreateBookDialog) {
                     Fragment.load({
                         id: "CreateBookDialog",
@@ -153,32 +153,17 @@ sap.ui.define([
             bindExistingBook: function (sPath) {
                 this.CreateBookDialog.bindElement({
                     path: sPath
-                });
-
-                this.viewModel.setProperty("/authorNameVisibility", false);
-                this.viewModel.setProperty("/categoryNameVisibility", false);
+                });              
             },
 
-            bindNewBook: function () {
-                this.viewModel.setProperty("/authorNameVisibility", false);
-                this.viewModel.setProperty("/categoryNameVisibility", false);
+            bindNewBook: function () {     
                 this.tempEvent = this.getView().getModel().createEntry("Books", {
                     properties: {}
                 });
-
-
                 this.CreateBookDialog.bindElement({
                     path: this.tempEvent.getPath()
                 });
             },
-
-            // onAuthorIDLiveChange: function (oEvent) {
-            //     let authorId = parseInt(oEvent.getParameter("value"));
-            //     let authorExists = this.viewModel.getProperty("/authors").some(function (item) {
-            //         return item.ID = authorId;
-            //     });
-
-            // },
 
             setDialogTitle: function (sExistingQPath) {
                 if (this.CreateBookDialog) {
@@ -199,31 +184,6 @@ sap.ui.define([
 
             saveBook: function () {
                 let oModel = this.getView().getModel();
-                let authorName = this.viewModel.getProperty("/authorName");
-                if (authorName) {
-                    this.authorEvent = this.getView().getModel().createEntry("/Authors", {
-                        properties: {
-                            name: authorName,
-                            ID: this.viewModel.getProperty("/authors").length + 1
-                        }
-                    });
-
-                    oModel.setProperty(this.tempEvent.getPath() + "/author_ID", this.authorEvent.getProperty("ID"));
-                    
-                }
-
-                let categoryName = this.viewModel.getProperty("/categoryName");
-                if (categoryName) {
-                    this.categoryEvent = this.getView().getModel().createEntry("/Categories", {
-                        properties: {
-                            name: categoryName,
-                            ID: this.viewModel.getProperty("/categories").length + 1
-                        }
-                    });
-
-                    oModel.setProperty(this.tempEvent.getPath() + "/category_ID", this.categoryEvent.getProperty("ID"));
-                }
-
 
                 if (this.bIsCreateNew) {
                     this.setI18nResponseMsg("successfullyCreated", "");
@@ -247,11 +207,120 @@ sap.ui.define([
 
             setI18nResponseMsg: function (sSuccess, sError) {
                 this.successI18nMsg = sSuccess;
-                // this.errorI18nMsg = sError;
             },
 
-            onBorrowBook: function () {
+            onCreateAuthor : function () {
+                if (!this.AuthorDialog) {
+                    Fragment.load({
+                        id: "AuthorDialog",
+                        name: "custombookshop.view.fragments.Author",
+                        controller: this
+                    }).then(function (oDialog) {
+                        this.AuthorDialog = oDialog;
+                        this.getView().addDependent(this.AuthorDialog);
+                        this.bindNewAuthor();
+                        this.AuthorDialog.open();
+                    }.bind(this));
+                } else {
+                    this.bindNewAuthor();
+                    this.AuthorDialog.open();
+                }
+            },
 
+            bindNewAuthor : function () {
+                this.getView().getModel().resetChanges(); //reset any OData changes
+                this.authorEvent = this.getView().getModel().createEntry("Authors", {
+                    properties: {
+                       
+                    }
+                });
+
+                this.AuthorDialog.bindElement({
+                    path: this.authorEvent.getPath()
+                });
+            },
+
+            saveAuthor : function () {
+                let oModel = this.getView().getModel();
+                oModel.submitChanges({
+                    success: $.proxy(function () {
+                        MessageToast.show(this.i18n.getText("successfullyCreated"));
+                        // this.getView().byId("idTblBookData").rebindTable();
+                        this.onCloseCreateAuthorDialog();
+                       
+                    }, this),
+
+                    error: function (oError) {
+                        var sError = JSON.parse(oError.responseText).error.message.value;
+                        MessageBox.error(sError);
+                    }
+
+                });
+            },
+
+            onCloseCreateAuthorDialog : function () {
+                this.AuthorDialog.close();
+                this.authorEvent = null;
+                this.AuthorDialog.unbindElement();
+            },
+
+            onCreateCategory : function () {
+                if (!this.CategoryDialog) {
+                    Fragment.load({
+                        id: "CategoryDialog",
+                        name: "custombookshop.view.fragments.Category",
+                        controller: this
+                    }).then(function (oDialog) {
+                        this.CategoryDialog = oDialog;
+                        this.getView().addDependent(this.CategoryDialog);
+                        this.bindNewCategory();
+                        this.CategoryDialog.open();
+                    }.bind(this));
+                } else {
+                    this.bindNewCategory();
+                    this.CategoryDialog.open();
+                }
+            },
+
+            bindNewCategory : function () {
+                this.getView().getModel().resetChanges(); //reset any OData changes
+                this.categoryEvent = this.getView().getModel().createEntry("Categories", {
+                    properties: {
+                       
+                    }
+                });
+
+                this.CategoryDialog.bindElement({
+                    path: this.categoryEvent.getPath()
+                });
+            },
+
+            saveCategory: function () {
+                let oModel = this.getView().getModel();
+                oModel.submitChanges({
+                    success: $.proxy(function () {
+                        MessageToast.show(this.i18n.getText("successfullyCreated"));
+                        // this.getView().byId("idTblBookData").rebindTable();
+                        this.onCloseCreateCategoryDialog();
+                       
+                    }, this),
+
+                    error: function (oError) {
+                        var sError = JSON.parse(oError.responseText).error.message.value;
+                        MessageBox.error(sError);
+                    }
+
+                });
+            },
+
+            onCloseCreateCategoryDialog : function () {
+                this.CategoryDialog.close();
+                this.categoryEvent = null;
+                this.CategoryDialog.unbindElement();
+            },
+
+
+            onBorrowBook: function () {
                 if (!this.BorrowBookDialog) {
                     Fragment.load({
                         id: "BorrowBookDialog",
@@ -261,7 +330,6 @@ sap.ui.define([
                         this.BorrowBookDialog = oDialog;
                         this.getView().addDependent(this.BorrowBookDialog);
                         this.bindNewBorrowBook();
-
                         this.BorrowBookDialog.open();
                     }.bind(this));
                 } else {

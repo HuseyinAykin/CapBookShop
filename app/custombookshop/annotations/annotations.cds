@@ -4,6 +4,12 @@ using CatalogService as service from '../../../srv/cat-service';
 //-------------------- Labels --------------------------//
 annotate service.Authors with {
     ID @Common.Label: '{i18n>authorID}';
+
+};
+
+annotate service.Countries with {
+    name @Common.Label: '{i18n>countryName}';
+
 };
 
 annotate service.Books with {
@@ -16,6 +22,7 @@ annotate service.Books with {
 
 annotate service.Reportings with {
     bookName     @Common.Label: '{i18n>bookName}';
+    authorName   @Common.Label: '{i18n>authorName}';
     borrowedDate @Common.Label: '{i18n>borrowedDate}';
     returnDate   @Common.Label: '{i18n>returnDate}';
     person       @Common.Label: '{i18n>person}'
@@ -78,6 +85,18 @@ annotate service.Authors @(UI: {
     ],
 });
 
+annotate service.Categories @(UI: {
+    SelectionFields: [name],
+
+    LineItem       : [
+        {
+            $Type: 'UI.DataField',
+            Value: name
+        }
+
+    ],
+});
+
 annotate service.Reportings @(UI: {
     SelectionFields: [
         borrowedDate,
@@ -90,6 +109,10 @@ annotate service.Reportings @(UI: {
         {
             $Type: 'UI.DataField',
             Value: bookName
+        },
+           {
+            $Type: 'UI.DataField',
+            Value: authorName
         },
         {
             $Type: 'UI.DataField',

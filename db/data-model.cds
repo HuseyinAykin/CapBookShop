@@ -22,16 +22,16 @@ entity Books : managed {
         category     : Association to one Categories;
 }
 
-entity Authors : managed {
-    key ID             : Integer @title: 'Author ID';
+entity Authors : managed,cuid {
+    // key ID             : Integer @title: 'Author ID';
         name           : String  @title: 'Author Name';
         countryOfBirth : Country;
         books          : Association to many Books
                              on books.author = $self;
 }
 
-entity Categories {
-    key ID          : Integer @title: 'Category ID';
+entity Categories: cuid{
+    // key ID          : Integer @title: 'Category ID';
         name        : String  @title: 'Category Name';
         subCategory : Composition of many SubCategories
                           on subCategory.category = $self;

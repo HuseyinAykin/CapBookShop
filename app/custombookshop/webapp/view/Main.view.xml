@@ -66,8 +66,30 @@
             <smartFilterBar:layoutData>
               <FlexItemData shrinkFactor="0"/>
             </smartFilterBar:layoutData>
-             <smartTable:SmartTable entitySet="Authors" tableType="ResponsiveTable" smartFilterId="smartFilterBarAuthors" enableAutoBinding="true" header="{i18n>author}"></smartTable:SmartTable>
+             <smartTable:SmartTable entitySet="Authors" tableType="ResponsiveTable" smartFilterId="smartFilterBarAuthors" enableAutoBinding="true" header="{i18n>author}">
+                <smartTable:customToolbar>
+              <OverflowToolbar id="_IDGenOverflowToolbar2" design="Transparent">
+                <ToolbarSpacer id="_IDGenToolbarSpacer2"/>
+                <Button id="IDGenButton2" text="{i18n>createAuthor}" press="onCreateAuthor" type="Emphasized"/>
+              </OverflowToolbar>
+            </smartTable:customToolbar>
+             </smartTable:SmartTable>
           </smartFilterBar:SmartFilterBar>
+        </IconTabFilter>
+        <IconTabFilter text="{i18n>categories}" key="category">
+        <smartFilterBar:SmartFilterBar id="smartFilterBarCategories" entitySet="Categories" persistencyKey="SmartFilterCategories_Explored" enableBasicSearch="false" showClearOnFB="true">
+            <smartFilterBar:layoutData>
+              <FlexItemData shrinkFactor="0"/>
+            </smartFilterBar:layoutData>
+              <smartTable:SmartTable entitySet="Categories" tableType="ResponsiveTable" smartFilterId="smartFilterBarCategories" enableAutoBinding="true" header="{i18n>category}">
+                <smartTable:customToolbar>
+              <OverflowToolbar id="_IDGenOverflowToolbar3" design="Transparent">
+                <ToolbarSpacer id="_IDGenToolbarSpacer3"/>
+                <Button id="IDGenButton3" text="{i18n>createCategory}" press="onCreateCategory" type="Emphasized"/>
+              </OverflowToolbar>
+            </smartTable:customToolbar>
+             </smartTable:SmartTable>
+             </smartFilterBar:SmartFilterBar>
         </IconTabFilter>
       </items>
     </IconTabBar>

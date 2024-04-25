@@ -19,7 +19,7 @@ modules:
       builder: npm
   - name: CapBookshop
     type: approuter.nodejs
-    path: app/router
+    path: app/
     requires:
       - name: srv-api
         group: destinations
@@ -35,9 +35,9 @@ modules:
           name: ui5
           url: https://ui5.sap.com
     parameters:
-      disk-quota: 256M
+      disk-quota: 512M
       keep-existing-routes: true
-      memory: 256M
+      memory: 512M
   - name: CapBookshop-db-deployer
     type: hdb
     path: gen/db
@@ -74,9 +74,6 @@ resources:
   - name: CapBookshop-auth
     type: org.cloudfoundry.managed-service
     parameters:
-      config:
-        tenant-mode: dedicated
-        xsappname: CapBookshop-${org}-${space}
       path: ./xs-security.json
       service: xsuaa
       service-plan: application
@@ -99,6 +96,14 @@ resources:
           instance:
             destinations:
               - Authentication: NoAuthentication
+                Description: CAP Backend OData Service Destination
+                HTML5.DynamicDestination: true
+                Name: srv-api
+                ProxyType: Internet
+                Type: HTTP
+                URL: ~{srv-api/srv-url}
+                HTML5.Timeout: 300000   
+              - Authentication: NoAuthentication
                 Name: ui5
                 ProxyType: Internet
                 Type: HTTP
@@ -108,6 +113,8 @@ resources:
       service: destination
       service-name: CapBookshop-destination-service
       service-plan: lite
+    requires:
+      - name: srv-api
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
