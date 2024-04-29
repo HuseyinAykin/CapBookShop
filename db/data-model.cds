@@ -5,6 +5,8 @@ using {
 
 } from '@sap/cds/common';
 
+using from '@sap/cds-common-content';
+
 namespace my.bookshop;
 
 entity Books : managed {
